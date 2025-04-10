@@ -1,5 +1,6 @@
 package com.example.zingmp3clone.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.zingmp3clone.data.model.Song
@@ -19,6 +20,8 @@ class SongViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            val allSongs = songRepository.getAllSongs()
+            Log.d("SONG_VM", "Fetched ${allSongs.size} songs")
             _songs.value = songRepository.getAllSongs()
         }
     }

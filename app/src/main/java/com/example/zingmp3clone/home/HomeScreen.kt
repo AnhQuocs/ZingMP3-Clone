@@ -43,7 +43,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSongClick: (Int) -> Unit
 ) {
     val pagerState = rememberPagerState(
         initialPage = 1,
@@ -73,7 +74,7 @@ fun HomeScreen(
             ) { page ->
                 when (page) {
                     0 -> LibraryScreen()
-                    1 -> ExploreScreen()
+                    1 -> ExploreScreen(onSongClick = onSongClick)
                     2 -> FavoriteScreen()
                     3 -> ProfileScreen()
                 }

@@ -2,15 +2,20 @@ package com.example.zingmp3clone.pages
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -23,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,15 +41,30 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.zingmp3clone.item.SongCard
+import com.example.zingmp3clone.viewmodel.SongViewModel
 
 @Composable
-fun ExploreScreen(modifier: Modifier = Modifier) {
+fun ExploreScreen(modifier: Modifier = Modifier, onSongClick: (Int) -> Unit) {
+
+    val songViewModel: SongViewModel = hiltViewModel()
+
     Scaffold(
         topBar = {TopAppBar()}
     ) { paddingValues ->
         Column(
             modifier = Modifier.padding(paddingValues)
-        ) {  }
+        ) {
+            Spacer(Modifier.height(30.dp))
+            Text(
+                "Bài hát của tôi",
+                fontSize = 20.sp,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            MySongs(songViewModel = songViewModel, onSongClick = onSongClick)
+        }
     }
 }
 
@@ -100,7 +121,9 @@ fun TopAppBar(modifier: Modifier = Modifier) {
                         textStyle = LocalTextStyle.current.copy(
                             color = MaterialTheme.colorScheme.onSurface
                         ),
-                        modifier = Modifier.weight(1f).focusRequester(focusRequester),
+                        modifier = Modifier
+                            .weight(1f)
+                            .focusRequester(focusRequester),
                         decorationBox = { innerTextField ->
                             if (searchText.isEmpty()) {
                                 Text(
@@ -138,3 +161,30 @@ fun TopAppBar(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MySongs(
+    modifier: Modifier = Modifier,
+    songViewModel: SongViewModel,
+    onSongClick: (Int) -> Unit
+) {
+    val songList by songViewModel.songs.collectAsState(initial = emptyList())
+    val pages = songList.chunked(3)
+    val pagerState = rememberPagerState(pageCount = {pages.size})
+
+    HorizontalPager(state = pagerState) { page ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            pages[page].forEach{ song ->
+                SongCard(
+                    song = song,
+                    onClick = {onSongClick(song.id)}
+                )
+            }
+        }
+    }
+}
