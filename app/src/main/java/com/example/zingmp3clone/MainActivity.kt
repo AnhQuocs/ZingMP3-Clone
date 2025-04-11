@@ -13,11 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,7 +32,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ZingMP3CloneTheme {
-                Scaffold(modifier = Modifier.fillMaxSize(), containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = MaterialTheme.colorScheme.background
+                ) { innerPadding ->
                     Greeting(modifier = Modifier.padding(innerPadding))
                 }
             }
@@ -52,44 +52,46 @@ fun Greeting(modifier: Modifier = Modifier) {
         startDestination = "home",
         modifier = modifier
     ) {
-        composable("home") {
+        composable(
+            route = "home"
+        ) {
             HomeScreen(
-                onSongClick = {songId ->
+                onSongClick = { songId ->
                     navController.navigate("musicPlayer/$songId")
                 }
             )
         }
 
         composable(
-            "musicPlayer/{songId}",
-            arguments = listOf(navArgument("songId") {type = NavType.IntType}),
+            route = "musicPlayer/{songId}",
+            arguments = listOf(navArgument("songId") { type = NavType.IntType }),
             enterTransition = {
                 slideInVertically(
-                    initialOffsetY = { fullHeight -> fullHeight }, // Trượt từ dưới lên
-                    animationSpec = tween(300)
-                ) + fadeIn(animationSpec = tween(300))
+                    initialOffsetY = { fullHeight -> fullHeight },
+                    animationSpec = tween(durationMillis = 400)
+                ) + fadeIn(animationSpec = tween(durationMillis = 400))
             },
             exitTransition = {
                 slideOutVertically(
-                    targetOffsetY = { fullHeight -> -fullHeight }, // Trượt lên khi thoát
-                    animationSpec = tween(300)
-                ) + fadeOut(animationSpec = tween(300))
+                    targetOffsetY = { fullHeight -> -fullHeight },
+                    animationSpec = tween(durationMillis = 400)
+                ) + fadeOut(animationSpec = tween(durationMillis = 400))
             },
             popEnterTransition = {
                 slideInVertically(
-                    initialOffsetY = { fullHeight -> -fullHeight }, // Khi back: trượt từ trên xuống
-                    animationSpec = tween(300)
-                ) + fadeIn(animationSpec = tween(300))
+                    initialOffsetY = { fullHeight -> -fullHeight },
+                    animationSpec = tween(durationMillis = 400)
+                ) + fadeIn(animationSpec = tween(durationMillis = 400))
             },
             popExitTransition = {
                 slideOutVertically(
-                    targetOffsetY = { fullHeight -> fullHeight }, // Khi back: trượt xuống
-                    animationSpec = tween(300)
-                ) + fadeOut(animationSpec = tween(300))
+                    targetOffsetY = { fullHeight -> fullHeight },
+                    animationSpec = tween(durationMillis = 400)
+                ) + fadeOut(animationSpec = tween(durationMillis = 400))
             }
-            ) { backStackEntry ->
+        ) { backStackEntry ->
             val songId = backStackEntry.arguments?.getInt("songId")
-            MusicPlayerScreen(songId = songId)
+            MusicPlayerScreen(modifier = Modifier.fillMaxSize(), songId = songId, onBackHome = {navController.popBackStack()})
         }
     }
 }

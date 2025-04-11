@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -38,6 +39,7 @@ import com.example.zingmp3clone.pages.ExploreScreen
 import com.example.zingmp3clone.pages.FavoriteScreen
 import com.example.zingmp3clone.pages.LibraryScreen
 import com.example.zingmp3clone.pages.ProfileScreen
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -52,6 +54,17 @@ fun HomeScreen(
     )
 
     val coroutineScope = rememberCoroutineScope()
+
+    val systemUiController = rememberSystemUiController()
+    // Lấy colorScheme trong composable context
+    val surfaceColor = MaterialTheme.colorScheme.surface
+
+    LaunchedEffect(Unit) {
+        systemUiController.setStatusBarColor(
+            color = surfaceColor, // Sử dụng biến đã lưu
+            darkIcons = false // hoặc false tùy màu nền
+        )
+    }
 
     Scaffold(
         bottomBar = {

@@ -72,6 +72,10 @@ dependencies {
 
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
 
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.34.0")
+
+    implementation ("androidx.palette:palette-ktx:1.0.0")
+
 //    implementation("com.bef.effectsdkk:effectsdkk:1.0.0")
 
     // Room Database

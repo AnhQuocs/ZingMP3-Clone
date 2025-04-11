@@ -45,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.zingmp3clone.item.SongCard
 import com.example.zingmp3clone.viewmodel.SongViewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun ExploreScreen(modifier: Modifier = Modifier, onSongClick: (Int) -> Unit) {
