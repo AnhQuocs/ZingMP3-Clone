@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,6 +24,7 @@ import androidx.navigation.navArgument
 import com.example.zingmp3clone.home.HomeScreen
 import com.example.zingmp3clone.home.tabs.MusicPlayerScreen
 import com.example.zingmp3clone.ui.theme.ZingMP3CloneTheme
+import com.example.zingmp3clone.viewmodel.RecentSongViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,7 +46,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(modifier: Modifier = Modifier) {
+fun Greeting(
+    modifier: Modifier = Modifier,
+    recentSongViewModel: RecentSongViewModel = hiltViewModel()
+) {
     val navController = rememberNavController()
 
     NavHost(
@@ -58,6 +63,7 @@ fun Greeting(modifier: Modifier = Modifier) {
             HomeScreen(
                 onSongClick = { songId ->
                     navController.navigate("musicPlayer/$songId")
+                    recentSongViewModel.insertRecentSongById(songId)
                 }
             )
         }

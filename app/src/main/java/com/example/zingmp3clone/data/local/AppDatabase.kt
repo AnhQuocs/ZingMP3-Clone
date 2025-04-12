@@ -7,14 +7,16 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabase.Callback
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.zingmp3clone.R
+import com.example.zingmp3clone.data.model.RecentSong
 import com.example.zingmp3clone.data.model.Song
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Song::class], version = 4, exportSchema = false)
+@Database(entities = [Song::class, RecentSong::class], version = 6, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun songDao(): SongDao
+    abstract fun recentSongDao(): RecentSongDao
 
     companion object {
         @Volatile
@@ -43,6 +45,17 @@ private class RoomCallback(private val context: Context) : Callback() {
         CoroutineScope(Dispatchers.IO).launch {
             val database = AppDatabase.getDatabase(context)
             populateDatabase(database.songDao())
+        }
+    }
+
+    override fun onOpen(db: SupportSQLiteDatabase) {
+        super.onOpen(db)
+        CoroutineScope(Dispatchers.IO).launch {
+            val database = AppDatabase.getDatabase(context)
+            val songDao = database.songDao()
+            if (songDao.getAllSongs().isEmpty()) {
+                populateDatabase(songDao)
+            }
         }
     }
 }

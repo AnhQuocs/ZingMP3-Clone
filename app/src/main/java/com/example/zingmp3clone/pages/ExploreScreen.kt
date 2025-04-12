@@ -189,3 +189,8 @@ fun MySongs(
         }
     }
 }
+
+@Composable
+fun RecentSong(modifier: Modifier = Modifier) {
+
+}

@@ -65,12 +65,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.palette.graphics.Palette
 import com.example.zingmp3clone.R
 import com.example.zingmp3clone.ui.theme.ZingMP3CloneTheme
+import com.example.zingmp3clone.viewmodel.RecentSongViewModel
 import com.example.zingmp3clone.viewmodel.SongViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import android.graphics.Color as AndroidColor
 
 @Composable
-fun MusicPlayerScreen(modifier: Modifier = Modifier, songId: Int?, onBackHome: () -> Unit) {
+fun MusicPlayerScreen(
+    modifier: Modifier = Modifier,
+    songId: Int?,
+    onBackHome: () -> Unit,
+    recentSongViewModel: RecentSongViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
     val songViewModel: SongViewModel = hiltViewModel()
     val songList by songViewModel.songs.collectAsState(initial = emptyList())
@@ -115,8 +121,11 @@ fun MusicPlayerScreen(modifier: Modifier = Modifier, songId: Int?, onBackHome: (
         mediaPlayer?.release()
         mediaPlayer = null
 
+
         val newSong = songList.getOrNull(index) ?: return
         val player = MediaPlayer.create(context, newSong.id)
+
+        recentSongViewModel.insertRecentSongById(newSong.id)
 
         mediaPlayer = player
         currentSongIndex = index
@@ -273,7 +282,9 @@ fun MusicControlPanel(
         Slider(
             value = progress,
             onValueChange = onSeekChanged,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -286,7 +297,9 @@ fun MusicControlPanel(
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -381,7 +394,9 @@ fun TopMusicPlayerBar(modifier: Modifier = Modifier, onBackHome: () -> Unit) {
             Icons.Default.KeyboardArrowDown,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(36.dp).clickable { onBackHome() }
+            modifier = Modifier
+                .size(36.dp)
+                .clickable { onBackHome() }
         )
 
         Text(
@@ -472,7 +487,9 @@ fun SongInfo(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f).padding(horizontal = 24.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 24.dp)
             ) {
                 Text(
                     text = name,
@@ -492,10 +509,10 @@ fun SongInfo(
             var isFavorite by remember { mutableStateOf(false) }
 
             IconButton(
-                onClick = {isFavorite = !isFavorite}
+                onClick = { isFavorite = !isFavorite }
             ) {
                 Icon(
-                    if(isFavorite)Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = null,
                     modifier = Modifier
                         .size(24.dp)
