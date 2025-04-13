@@ -414,14 +414,6 @@ fun TopMusicPlayerBar(modifier: Modifier = Modifier, onBackHome: () -> Unit) {
     }
 }
 
-//@Preview
-//@Composable
-//private fun TopMusicPlayerBarPreview() {
-//    ZingMP3CloneTheme {
-//        TopMusicPlayerBar()
-//    }
-//}
-
 @Composable
 fun SongInfo(
     modifier: Modifier = Modifier,
