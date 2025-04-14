@@ -15,4 +15,6 @@ class RecentSongRepository @Inject constructor(
     suspend fun insertRecentSong(song: RecentSong) = recentSongDao.insertRecentSong(song)
 
     suspend fun getAllRecentSongs(): List<RecentSong> = recentSongDao.getAllRecentSongs()
+
+    suspend fun deleteById(id: Int) { recentSongDao.deleteById(id) }
 }

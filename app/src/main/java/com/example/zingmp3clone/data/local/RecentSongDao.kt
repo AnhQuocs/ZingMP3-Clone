@@ -15,7 +15,7 @@ interface RecentSongDao {
     suspend fun insertRecentSong(song: RecentSong)
 
     @Query("DELETE FROM recent_song WHERE id = :id")
-    suspend fun deleteById(id: String)
+    suspend fun deleteById(id: Int)
 
     @Query("DELETE FROM recent_song")
     suspend fun deleteAll()

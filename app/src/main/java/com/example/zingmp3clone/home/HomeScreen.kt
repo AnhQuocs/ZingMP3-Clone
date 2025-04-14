@@ -35,6 +35,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.zingmp3clone.pages.ExploreScreen
 import com.example.zingmp3clone.pages.FavoriteScreen
 import com.example.zingmp3clone.pages.LibraryScreen
@@ -46,7 +47,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onSongClick: (Int) -> Unit
+    onSongClick: (Int) -> Unit,
+    navController: NavController
 ) {
     val pagerState = rememberPagerState(
         initialPage = 1,
@@ -87,7 +89,7 @@ fun HomeScreen(
             ) { page ->
                 when (page) {
                     0 -> LibraryScreen()
-                    1 -> ExploreScreen(onSongClick = onSongClick)
+                    1 -> ExploreScreen(onSongClick = onSongClick, navController = navController)
                     2 -> FavoriteScreen()
                     3 -> ProfileScreen()
                 }

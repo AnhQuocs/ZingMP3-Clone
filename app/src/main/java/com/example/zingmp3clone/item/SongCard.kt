@@ -56,7 +56,7 @@ fun SongCard(
                 painter = rememberAsyncImagePainter(song.thumbnail),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(64.dp)
+                    .size(58.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
@@ -71,7 +71,7 @@ fun SongCard(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
-                    lineHeight = 14.sp
+                    lineHeight =20.sp
                 )
 
                 Text(
@@ -80,7 +80,7 @@ fun SongCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                    lineHeight = 14.sp
+                    lineHeight = 20.sp
                 )
             }
 

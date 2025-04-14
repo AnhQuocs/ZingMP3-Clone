@@ -42,6 +42,16 @@ class RecentSongViewModel @Inject constructor(
                     playedAt = System.currentTimeMillis()
                 )
                 recentSongRepository.insertRecentSong(recent)
+
+                val allRecent = recentSongRepository.getAllRecentSongs().sortedByDescending { it.playedAt }
+
+                if(allRecent.size > 5) {
+                    val songToRemove = allRecent.drop(5)
+                    songToRemove.forEach {
+                        recentSongRepository.deleteById(it.id)
+                    }
+                }
+
                 _recentSong.value = recentSongRepository.getAllRecentSongs()
             }
         }
